@@ -1,5 +1,6 @@
 package br.uema.loja_Roupas.controllers;
 
+import br.uema.loja_Roupas.dto.ResumoPedidoDTO;
 import br.uema.loja_Roupas.entity.*;
 import br.uema.loja_Roupas.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -16,16 +18,15 @@ public class PedidoController {
     @Autowired private PedidoService service;
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> listarTodos() {
-        List<Pedido> lista = service.listarTodos();
+    public ResponseEntity<List<ResumoPedidoDTO>> listarTodos() {
+        List<ResumoPedidoDTO> lista = service.listarTodos();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> buscarPorId(@PathVariable Integer id) {
-        Optional<Pedido> pedido = service.buscarPorId(id);
-        return pedido.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ResumoPedidoDTO> buscarPorId(@PathVariable Integer id) {
+        ResumoPedidoDTO dto = service.buscarPorId(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
@@ -34,7 +35,9 @@ public class PedidoController {
             Pedido novo = service.salvar(pedido);
             return ResponseEntity.ok(novo);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    Map.of("erro", e.getMessage())
+            );
         }
     }
 

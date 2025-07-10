@@ -3,6 +3,7 @@ package br.uema.loja_Roupas.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Pedidos")
@@ -17,8 +18,15 @@ public class Pedido {
     @Setter(AccessLevel.NONE)
     private Integer id;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "Data_Pedido")
     private LocalDate data;
+
+    // Força a data de hoje ao persistir no banco
+    @PrePersist
+    public void definirDataAtual() {
+        this.data = LocalDate.now();
+    }
 
     @ManyToOne
     @JoinColumn(name = "ID_Cliente")

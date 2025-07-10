@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 
 @Entity
@@ -29,8 +30,15 @@ public class RegistroPagamento {
     @Column(name = "Valor_Pagamento")
     private BigDecimal valor;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "Data_Pagamento")
     private LocalDate data;
+
+    // Força a data de hoje ao persistir no banco
+    @PrePersist
+    public void definirDataAtual() {
+        this.data = LocalDate.now();
+    }
 
     @Builder
     public RegistroPagamento(Pedido pedido, String metodo, BigDecimal valor, LocalDate data) {

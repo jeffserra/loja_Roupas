@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -28,14 +29,24 @@ public class ItensPedidoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // salva um único item
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody ItensPedido item) {
         try {
             ItensPedido novo = service.salvar(item);
             return ResponseEntity.ok(novo);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    Map.of("erro", e.getMessage())
+            );
         }
+    }
+
+    // salva uma lista de itens
+    @PostMapping("/lista-itens")
+    public ResponseEntity<List<ItensPedido>> adicionarVariosItens(@RequestBody List<ItensPedido> itens) {
+        List<ItensPedido> itensSalvos = service.salvarTodos(itens);
+        return ResponseEntity.ok(itensSalvos);
     }
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +35,9 @@ public class ClienteController {
             Cliente novo = service.salvar(cliente);
             return ResponseEntity.ok(novo);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    Map.of("erro", e.getMessage())
+            );
         }
     }
 

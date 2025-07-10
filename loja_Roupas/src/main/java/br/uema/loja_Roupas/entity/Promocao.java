@@ -1,9 +1,12 @@
 package br.uema.loja_Roupas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -25,11 +28,22 @@ public class Promocao {
     @Column(name = "Desconto_Percentual")
     private BigDecimal desconto;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "Data_Inicio")
     private LocalDate data_inicio;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "Data_Fim")
     private LocalDate data_fim;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Promocoes_Produtos",
+            joinColumns = @JoinColumn(name = "ID_Promocao"),
+            inverseJoinColumns = @JoinColumn(name = "ID_Produto")
+    )
+    @JsonIgnore
+    private List<Produto> produtos;
 
     @Builder
     public Promocao(String nome, BigDecimal desconto, LocalDate data_inicio, LocalDate data_fim) {

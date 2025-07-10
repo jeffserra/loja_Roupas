@@ -77,11 +77,11 @@ CREATE TABLE Promocoes (
     Data_Fim DATE NOT NULL
 );
 
--- Tabela associativa Promocoes_Produtos
-CREATE TABLE Promocoes_Produtos (
+-- Tabela associativa Itens_Pedido_Promocao
+CREATE TABLE Itens_Pedido_Promocao (
+    ID_Item INT,
     ID_Promocao INT,
-    ID_Produto INT,
-    PRIMARY KEY (ID_Promocao, ID_Produto),
-    FOREIGN KEY (ID_Promocao) REFERENCES Promocoes(ID_Promocao),
-    FOREIGN KEY (ID_Produto) REFERENCES Produtos(ID_Produto)
+    PRIMARY KEY (ID_Item, ID_Promocao),
+    FOREIGN KEY (ID_Item) REFERENCES Itens_Pedido(ID_Item),
+    FOREIGN KEY (ID_Promocao) REFERENCES Promocoes(ID_Promocao)
 );

@@ -38,6 +38,11 @@ public class PromocaoService {
     }
 
     public void deletar(Integer id) {
+        repo.findById(id).ifPresent(promocao -> {
+            promocao.getProdutos().clear(); // Remove associações da tabela Promocoes_Produtos
+            repo.save(promocao);
+        });
+
         repo.deleteById(id);
     }
 
